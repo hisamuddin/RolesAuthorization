@@ -12,6 +12,9 @@ using KiromicBioPharma_Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using KiromicBioPharma_Web.Services;
 
 namespace KiromicBioPharma_Web
 {
@@ -37,8 +40,8 @@ namespace KiromicBioPharma_Web
 
             //services.AddIdentity<IdentityUser, IdentityRole>()
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
-            
 
+            services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -59,7 +62,9 @@ namespace KiromicBioPharma_Web
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
-
+            services.AddMvc().AddRazorPagesOptions(options => {
+                options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "");
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
